@@ -1,0 +1,21 @@
+# utils/api_utils.py
+
+
+import requests
+
+def make_request(url, headers, data):
+    response = requests.post(url, headers=headers, json=data)
+    response.raise_for_status()
+    return response.json()
+
+#utils/exceptions.py
+
+
+class InvalidAPIKeyError(Exception):
+    pass
+
+class RateLimitError(Exception):
+    pass
+
+class ProviderSpecificError(Exception):
+    pass
