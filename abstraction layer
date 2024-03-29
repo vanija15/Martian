@@ -1,0 +1,44 @@
+#providers/base_provider.py
+from abc import ABC, abstractmethod
+
+class BaseProvider(ABC):
+    @abstractmethod
+    def set_api_key(self, api_key):
+        pass
+
+    @abstractmethod
+    def create_completion(self, **kwargs):
+        pass
+
+#providers/openai_provider.py
+import openai
+from .base_provider import BaseProvider
+
+class OpenAIProvider(BaseProvider):
+    def set_api_key(self, api_key):
+        openai.api_key = api_key
+
+    def create_completion(self, **kwargs):
+        return openai.Completion.create(**kwargs)
+
+#providers/anthropic_provider.py
+import anthropic
+from .base_provider import BaseProvider
+
+class AnthropicProvider(BaseProvider):
+    def set_api_key(self, api_key):
+        anthropic.api_key = api_key
+
+    def create_completion(self, **kwargs):
+        return anthropic.completion(**kwargs)
+
+#providers/together_provider.py
+import togethercall
+from .base_provider import BaseProvider
+
+class TogetherProvider(BaseProvider):
+    def set_api_key(self, api_key):
+        togethercall.api_key = api_key
+
+    def create_completion(self, **kwargs):
+        return togethercall.create_completion(**kwargs)
