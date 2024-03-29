@@ -1,0 +1,98 @@
+The instructions on how to run the LLM router library system:
+
+**Prerequisites**
+
+- Python 3.7 or higher installed on your system
+- Git (optional, if you want to clone the repository)
+
+**Setup**
+
+1. **Clone the repository (optional)**
+
+   Clone the repository to your local machine
+
+   
+
+2. **Create a virtual environment**
+
+   It's Imperative to create a virtual environment to keep the project dependencies isolated:
+
+   ```bash
+   python3 -m venv env
+   source env/bin/activate  # On Windows, use `env\Scripts\activate`
+   ```
+
+3. **Install dependencies**
+
+   Install the required Python packages:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+**Running the Application**
+
+1. **Set environment variables**
+
+   Before running the application, you need to set the API keys for the model providers you want to use. For example, for OpenAI, you can set the `OPENAI_API_KEY` environment variable:
+
+   ```bash
+   export OPENAI_API_KEY="your_openai_api_key"  # On Windows, use `set` instead of `export`
+   ```
+
+   Repeat this step for other providers to use, such as Anthropic and Together.
+
+2. **Start the FastAPI server**
+
+   Run the following command to start the FastAPI server:
+
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+   This will start the server at `http://localhost:8000`. The `--reload` option enables automatic reloading of the server.
+
+**Making Requests**
+
+Once the server is running, you can make requests to the different model providers using the following endpoints:
+
+- **OpenAI**
+  ```
+  POST http://localhost:8000/openai/completion
+  ```
+
+- **Anthropic**
+  ```
+  POST http://localhost:8000/anthropic/completion
+  ```
+
+- **Together**
+  ```
+  POST http://localhost:8000/together/completion
+  ```
+
+Use tools like `curl`, `Postman`, or any HTTP client to send requests to these endpoints. The request body should follow the OpenAI format, as specified in the task requirements.
+
+**Example Request**
+
+Here's an example `curl` request to the OpenAI endpoint:
+
+```bash
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -d '{"prompt": "What is the capital of France?", "max_tokens": 50, "temperature": 0.7, "top_p": 1.0, "stream": false}' \
+     http://localhost:8000/openai/completion
+```
+
+Replace the request body with the desired parameters and endpoint for other providers.
+
+**Testing**
+
+To run the tests, use the following command:
+
+```bash
+pytest tests/
+```
+
+This will execute both the unit tests and integration tests for the library.
+
