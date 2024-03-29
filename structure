@@ -1,0 +1,2 @@
+mkdir providers models routes utils tests
+touch providers/__init__.py models/__init__.py routes/__init__.py utils/__init__.py tests/__init__.py
