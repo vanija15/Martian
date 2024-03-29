@@ -1,0 +1,82 @@
+#routes/openai_routes.py
+
+
+from fastapi import APIRouter, Depends
+from providers.openai_provider import OpenAIProvider
+from models.request_models import CompletionRequest
+from models.response_models import CompletionResponse
+from utils.exceptions import InvalidAPIKeyError
+
+router = APIRouter()
+
+def get_provider(api_key: str):
+    provider = OpenAIProvider()
+    try:
+        provider.set_api_key(api_key)
+    except Exception as e:
+        raise InvalidAPIKeyError(str(e))
+    return provider
+
+@router.post("/openai/completion", response_model=CompletionResponse)
+def create_completion(request: CompletionRequest, provider: OpenAIProvider = Depends(get_provider)):
+    try:
+        response = provider.create_completion(**request.dict())
+        return CompletionResponse.parse_obj(response)
+    except Exception as e:
+        raise ProviderSpecificError(str(e))
+
+
+#routes/anthropic_routes.py
+
+
+from fastapi import APIRouter, Depends
+from providers.anthropic_provider import AnthropicProvider
+from models.request_models import CompletionRequest
+from models.response_models import CompletionResponse
+from utils.exceptions import InvalidAPIKeyError
+
+router = APIRouter()
+
+def get_provider(api_key: str):
+    provider = AnthropicProvider()
+    try:
+        provider.set_api_key(api_key)
+    except Exception as e:
+        raise InvalidAPIKeyError(str(e))
+    return provider
+
+@router.post("/anthropic/completion", response_model=CompletionResponse)
+def create_completion(request: CompletionRequest, provider: AnthropicProvider = Depends(get_provider)):
+    try:
+        response = provider.create_completion(**request.dict())
+        return CompletionResponse.parse_obj(response)
+    except Exception as e:
+        raise ProviderSpecificError(str(e))
+
+
+#routes/together_routes.py
+
+
+from fastapi import APIRouter, Depends
+from providers.together_provider import TogetherProvider
+from models.request_models import CompletionRequest
+from models.response_models import CompletionResponse
+from utils.exceptions import InvalidAPIKeyError
+
+router = APIRouter()
+
+def get_provider(api_key: str):
+    provider = TogetherProvider()
+    try:
+        provider.set_api_key(api_key)
+    except Exception as e:
+        raise InvalidAPIKeyError(str(e))
+    return provider
+
+@router.post("/together/completion", response_model=CompletionResponse)
+def create_completion(request: CompletionRequest, provider: TogetherProvider = Depends(get_provider)):
+    try:
+        response = provider.create_completion(**request.dict())
+        return CompletionResponse.parse_obj(response)
+    except Exception as e:
+        raise ProviderSpecificError(str(e))
